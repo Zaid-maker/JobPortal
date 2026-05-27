@@ -43,6 +43,7 @@
     "title": "Featured Opportunities",
     "subtitle": "Find your next career milestone with these hand-picked listings from world-class engineering teams.",
     "btnExplore": "Explore all 2,500+ jobs",
+    "viewDetails": "View details",
     "types": {
       "fullTime": "Full-time",
       "contract": "Contract"
@@ -55,7 +56,7 @@
     "badge": "Newly Added",
     "title": "Latest Job Openings",
     "btnViewAll": "View all jobs",
-    "details": "Details",
+    "viewDetails": "Details",
     "types": {
       "fullTime": "Full-time",
       "contract": "Contract"
@@ -63,6 +64,18 @@
     "locations": {
       "remote": "Remote"
     }
+  },
+  "JobDetails": {
+    "applyNow": "Apply Now",
+    "saveJob": "Save Job",
+    "postedAt": "Posted {time}",
+    "aboutRole": "About this role",
+    "responsibilities": "Responsibilities",
+    "requirements": "Requirements",
+    "benefits": "Benefits",
+    "shareJob": "Share Job",
+    "similarJobs": "Similar Jobs",
+    "backToJobs": "Back to Jobs"
   },
   "Footer": {
     "brandDescription": "The premium career platform for the next generation of builders. Find your next challenge or build your team.",
@@ -90,5 +103,8 @@
       "security": "Security"
     },
     "copyright": "© 2026 JobPortal Inc. All rights reserved."
+  },
+  "LogoCloud": {
+    "title": "Trusted by the world's most innovative teams"
   }
 }

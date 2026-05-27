@@ -1,0 +1,110 @@
+{
+  "Navbar": {
+    "findJobs": "Jobs finden",
+    "companies": "Unternehmen",
+    "dashboard": "Dashboard",
+    "employers": "Arbeitgeber",
+    "postAJob": "Job schalten",
+    "logIn": "Anmelden",
+    "signUp": "Registrieren"
+  },
+  "Hero": {
+    "title": "Entfesseln Sie Ihr <br /> <span1>Karrierepotenzial</span1>",
+    "subtitle": "Vernetzen Sie sich mit zukunftsorientierten Unternehmen. Von Startups bis hin zu Tech-Giganten – Ihr nächster großer Schritt beginnt hier.",
+    "search": "Jobtitel, Keywords oder Unternehmen",
+    "location": "Stadt oder Bundesland",
+    "btnSearch": "Jobs suchen",
+    "badge": "Neu: Täglich neue Remote-Möglichkeiten"
+  },
+  "Stats": {
+    "activeJobs": {
+      "label": "Aktive Jobs",
+      "value": "25k+",
+      "description": "Stellen in allen Fachbereichen"
+    },
+    "companies": {
+      "label": "Unternehmen",
+      "value": "10k+",
+      "description": "Vom Startup bis zum Fortune 500"
+    },
+    "candidates": {
+      "label": "Kandidaten",
+      "value": "500k+",
+      "description": "Talentierte Fachkräfte eingestellt"
+    },
+    "successRate": {
+      "label": "Erfolgsquote",
+      "value": "94%",
+      "description": "Matching-Genauigkeit für Arbeitgeber"
+    }
+  },
+  "FeaturedJobs": {
+    "badge": "Premium-Angebote",
+    "title": "Hervorgehobene Chancen",
+    "subtitle": "Finden Sie Ihren nächsten Karriereschritt mit diesen handverlesenen Angeboten von erstklassigen Engineering-Teams.",
+    "btnExplore": "Alle 2.500+ Jobs erkunden",
+    "viewDetails": "Details anzeigen",
+    "types": {
+      "fullTime": "Vollzeit",
+      "contract": "Vertrag"
+    },
+    "locations": {
+      "remote": "Remote"
+    }
+  },
+  "LatestJobs": {
+    "badge": "Neu hinzugefügt",
+    "title": "Aktuelle Stellenangebote",
+    "btnViewAll": "Alle Jobs anzeigen",
+    "viewDetails": "Details",
+    "types": {
+      "fullTime": "Vollzeit",
+      "contract": "Vertrag"
+    },
+    "locations": {
+      "remote": "Remote"
+    }
+  },
+  "JobDetails": {
+    "applyNow": "Jetzt bewerben",
+    "saveJob": "Job speichern",
+    "postedAt": "Veröffentlicht vor {time}",
+    "aboutRole": "Über diese Rolle",
+    "responsibilities": "Aufgaben",
+    "requirements": "Anforderungen",
+    "benefits": "Vorteile",
+    "shareJob": "Job teilen",
+    "similarJobs": "Ähnliche Jobs",
+    "backToJobs": "Zurück zu den Jobs"
+  },
+  "Footer": {
+    "brandDescription": "Die Premium-Karriereplattform für die nächste Generation von Erbauern. Finden Sie Ihre nächste Herausforderung oder bauen Sie Ihr Team auf.",
+    "titles": {
+      "product": "Produkt",
+      "company": "Unternehmen",
+      "legal": "Rechtliches"
+    },
+    "product": {
+      "findJobs": "Jobs finden",
+      "companies": "Unternehmen",
+      "postJob": "Job schalten",
+      "pricing": "Preise"
+    },
+    "company": {
+      "aboutUs": "Über uns",
+      "careers": "Karriere",
+      "blog": "Blog",
+      "contact": "Kontakt"
+    },
+    "legal": {
+      "privacy": "Datenschutz",
+      "terms": "AGB",
+      "cookie": "Cookies",
+      "security": "Sicherheit"
+    },
+    "copyright": "© 2026 JobPortal Inc. Alle Rechte vorbehalten."
+  },
+  "LogoCloud": {
+    "title": "Weltweit vertrauen innovative Teams auf uns"
+  }
+}

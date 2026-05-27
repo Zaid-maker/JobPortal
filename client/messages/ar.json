@@ -1,0 +1,110 @@
+{
+  "Navbar": {
+    "findJobs": "البحث عن وظيفة",
+    "companies": "الشركات",
+    "dashboard": "لوحة التحكم",
+    "employers": "أصحاب العمل",
+    "postAJob": "نشر وظيفة",
+    "logIn": "تسجيل الدخول",
+    "signUp": "إنشاء حساب"
+  },
+  "Hero": {
+    "title": "اطلق <br /> <span1>إمكانياتك المهنية</span1>",
+    "subtitle": "تواصل مع الشركات الطموحة. ابتداءً من الشركات الناشئة وصولاً إلى عمالقة التكنولوجيا، خطوتك الكبيرة التالية تبدأ من هنا.",
+    "search": "مسمى الوظيفة، كلمات مفتاحية، أو الشركة",
+    "location": "المدينة أو المنطقة",
+    "btnSearch": "البحث عن وظائف",
+    "badge": "جديد: فرص عمل عن بعد تضاف يومياً"
+  },
+  "Stats": {
+    "activeJobs": {
+      "label": "وظيفة نشطة",
+      "value": "+25 ألف",
+      "description": "فرص في جميع التخصصات"
+    },
+    "companies": {
+      "label": "شركة",
+      "value": "+10 آلاف",
+      "description": "من الشركات الناشئة إلى Fortune 500"
+    },
+    "candidates": {
+      "label": "مرشح",
+      "value": "+500 ألف",
+      "description": "تم توظيف محترفين موهوبين"
+    },
+    "successRate": {
+      "label": "معدل النجاح",
+      "value": "94%",
+      "description": "دقة المطابقة لأصحاب العمل"
+    }
+  },
+  "FeaturedJobs": {
+    "badge": "قوائم متميزة",
+    "title": "فرص مميزة",
+    "subtitle": "ابحث عن محطتك المهنية التالية مع هذه القوائم المختارة بعناية من فرق هندسية عالمية.",
+    "btnExplore": "استكشف أكثر من 2,500 وظيفة",
+    "viewDetails": "عرض التفاصيل",
+    "types": {
+      "fullTime": "دوام كامل",
+      "contract": "عقد"
+    },
+    "locations": {
+      "remote": "عن بعد"
+    }
+  },
+  "LatestJobs": {
+    "badge": "أضيف حديثاً",
+    "title": "أحدث الوظائف الشاغرة",
+    "btnViewAll": "عرض جميع الوظائف",
+    "viewDetails": "التفاصيل",
+    "types": {
+      "fullTime": "دوام كامل",
+      "contract": "عقد"
+    },
+    "locations": {
+      "remote": "عن بعد"
+    }
+  },
+  "JobDetails": {
+    "applyNow": "تقدم الآن",
+    "saveJob": "حفظ الوظيفة",
+    "postedAt": "نشر {time}",
+    "aboutRole": "عن الوظيفة",
+    "responsibilities": "المسؤوليات",
+    "requirements": "المتطلبات",
+    "benefits": "المميزات",
+    "shareJob": "مشاركة الوظيفة",
+    "similarJobs": "وظائف مشابهة",
+    "backToJobs": "العودة إلى الوظائف"
+  },
+  "Footer": {
+    "brandDescription": "منصة المهن المتميزة للجيل القادم من المبدعين. ابحث عن تحديك التالي أو ابدأ ببناء فريقك.",
+    "titles": {
+      "product": "المنتجات",
+      "company": "الشركة",
+      "legal": "قانوني"
+    },
+    "product": {
+      "findJobs": "البحث عن وظائف",
+      "companies": "الشركات",
+      "postJob": "نشر وظيفة",
+      "pricing": "الأسعار"
+    },
+    "company": {
+      "aboutUs": "من نحن",
+      "careers": "الوظائف",
+      "blog": "المدونة",
+      "contact": "اتصل بنا"
+    },
+    "legal": {
+      "privacy": "سياسة الخصوصية",
+      "terms": "شروط الخدمة",
+      "cookie": "سياسة ملفات الارتباط",
+      "security": "الأمان"
+    },
+    "copyright": "© 2026 JobPortal Inc. جميع الحقوق محفوظة."
+  },
+  "LogoCloud": {
+    "title": "موثوق من قبل أكثر الفرق ابتكاراً في العالم"
+  }
+}

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 const companies = [
   { name: "Google", logo: "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" },
@@ -12,11 +13,13 @@ const companies = [
 ];
 
 export default function LogoCloud() {
+  const t = useTranslations("LogoCloud");
+
   return (
     <section className="py-12 bg-white dark:bg-black overflow-hidden border-y border-zinc-100 dark:border-zinc-800">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <p className="text-center text-sm font-semibold text-zinc-500 uppercase tracking-widest mb-8">
-          Trusted by the world's most innovative teams
+          {t("title")}
         </p>
         
         <div className="relative">

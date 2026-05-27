@@ -41,8 +41,9 @@
   "FeaturedJobs": {
     "badge": "Listados Premium",
     "title": "Oportunidades destacadas",
-    "subtitle": "Encuentra tu próximo hito profesional con estos listados seleccionados de equipos de ingeniería de clase mundial.",
+    "subtitle": "Encuentra tu próximo hito profesional con estos listados seleccionados de equipos de ingeniería de clase mondiale.",
     "btnExplore": "Explora más de 2500 empleos",
+    "viewDetails": "Ver detalles",
     "types": {
       "fullTime": "Tiempo completo",
       "contract": "Contrato"
@@ -55,7 +56,7 @@
     "badge": "Recién añadidos",
     "title": "Últimas ofertas de empleo",
     "btnViewAll": "Ver todos los empleos",
-    "details": "Detalles",
+    "viewDetails": "Detalles",
     "types": {
       "fullTime": "Tiempo completo",
       "contract": "Contrato"
@@ -63,6 +64,18 @@
     "locations": {
       "remote": "Remoto"
     }
+  },
+  "JobDetails": {
+    "applyNow": "Postular ahora",
+    "saveJob": "Guardar empleo",
+    "postedAt": "Publicado hace {time}",
+    "aboutRole": "Acerca del puesto",
+    "responsibilities": "Responsabilidades",
+    "requirements": "Requisitos",
+    "benefits": "Beneficios",
+    "shareJob": "Compartir empleo",
+    "similarJobs": "Empleos similares",
+    "backToJobs": "Volver a los empleos"
   },
   "Footer": {
     "brandDescription": "La plataforma de carrera premium para la próxima generación de creadores. Encuentra tu próximo desafío o construye tu equipo.",
@@ -90,5 +103,8 @@
       "security": "Seguridad"
     },
     "copyright": "© 2026 JobPortal Inc. Todos los derechos reservados."
+  },
+  "LogoCloud": {
+    "title": "Con la confianza de los equipos más innovadores del mundo"
   }
 }

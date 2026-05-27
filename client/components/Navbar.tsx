@@ -114,11 +114,11 @@ export default function Navbar() {
             <div className="px-4 py-6 space-y-4">
               <div className="flex flex-col gap-1">
                 {[
-                  { name: "Find Jobs", href: "/jobs" },
-                  { name: "Companies", href: "/companies" },
-                  { name: "Dashboard", href: "/dashboard" },
-                  { name: "Employers", href: "/employer" },
-                  { name: "Post a Job", href: "/post-job", icon: PlusCircle },
+                  { name: t("findJobs"), href: "/jobs" },
+                  { name: t("companies"), href: "/companies" },
+                  { name: t("dashboard"), href: "/dashboard" },
+                  { name: t("employers"), href: "/employer" },
+                  { name: t("postAJob"), href: "/post-job", icon: PlusCircle },
                 ].map((link) => (
                   <Link 
                     key={link.name}
@@ -139,14 +139,14 @@ export default function Navbar() {
                     className="flex justify-center px-4 py-3 text-base font-medium text-zinc-600 hover:text-blue-600 dark:text-zinc-400 rounded-xl border border-zinc-200 dark:border-zinc-800"
                     onClick={() => setIsOpen(false)}
                   >
-                    Log in
+                    {t("logIn")}
                   </Link>
                   <Link 
                     href="/signup" 
                     className="flex justify-center rounded-xl bg-blue-600 px-4 py-3 text-base font-semibold text-white hover:bg-blue-700 shadow-lg shadow-blue-500/20"
                     onClick={() => setIsOpen(false)}
                   >
-                    Sign up
+                    {t("signUp")}
                   </Link>
                 </div>
               </div>

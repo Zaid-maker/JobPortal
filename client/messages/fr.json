@@ -1,0 +1,110 @@
+{
+  "Navbar": {
+    "findJobs": "Trouver un emploi",
+    "companies": "Entreprises",
+    "dashboard": "Tableau de bord",
+    "employers": "Employeurs",
+    "postAJob": "Publier une offre",
+    "logIn": "Connexion",
+    "signUp": "S'inscrire"
+  },
+  "Hero": {
+    "title": "Libérez votre <br /> <span1>potentiel professionnel</span1>",
+    "subtitle": "Connectez-vous avec des entreprises visionnaires. Des startups aux géants de la technologie, votre prochaine étape commence ici.",
+    "search": "Titre du poste, mots-clés ou entreprise",
+    "location": "Ville ou département",
+    "btnSearch": "Rechercher",
+    "badge": "Nouveau : Opportunités à distance ajoutées quotidiennement"
+  },
+  "Stats": {
+    "activeJobs": {
+      "label": "Emplois actifs",
+      "value": "25k+",
+      "description": "Postes ouverts dans toutes les disciplines"
+    },
+    "companies": {
+      "label": "Entreprises",
+      "value": "10k+",
+      "description": "De la startup au Fortune 500"
+    },
+    "candidates": {
+      "label": "Candidats",
+      "value": "500k+",
+      "description": "Talents recrutés avec succès"
+    },
+    "successRate": {
+      "label": "Taux de réussite",
+      "value": "94%",
+      "description": "Précision de matching pour les employeurs"
+    }
+  },
+  "FeaturedJobs": {
+    "badge": "Listes Premium",
+    "title": "Opportunités à la une",
+    "subtitle": "Trouvez votre prochaine étape professionnelle avec ces offres triées sur le volet par des équipes d'ingénierie de classe mondiale.",
+    "btnExplore": "Explorer les 2 500+ emplois",
+    "viewDetails": "Voir les détails",
+    "types": {
+      "fullTime": "Temps plein",
+      "contract": "Contrat"
+    },
+    "locations": {
+      "remote": "À distance"
+    }
+  },
+  "LatestJobs": {
+    "badge": "Récemment ajouté",
+    "title": "Dernières offres d'emploi",
+    "btnViewAll": "Voir tous les emplois",
+    "viewDetails": "Détails",
+    "types": {
+      "fullTime": "Temps plein",
+      "contract": "Contrat"
+    },
+    "locations": {
+      "remote": "À distance"
+    }
+  },
+  "JobDetails": {
+    "applyNow": "Postuler maintenant",
+    "saveJob": "Enregistrer l'offre",
+    "postedAt": "Publié il y a {time}",
+    "aboutRole": "À propos du poste",
+    "responsibilities": "Responsabilités",
+    "requirements": "Exigences",
+    "benefits": "Avantages",
+    "shareJob": "Partager",
+    "similarJobs": "Emplois similaires",
+    "backToJobs": "Retour aux offres"
+  },
+  "Footer": {
+    "brandDescription": "La plateforme de carrière premium pour la prochaine génération de bâtisseurs. Trouvez votre prochain défi ou construisez votre équipe.",
+    "titles": {
+      "product": "Produit",
+      "company": "Entreprise",
+      "legal": "Légal"
+    },
+    "product": {
+      "findJobs": "Trouver un emploi",
+      "companies": "Entreprises",
+      "postJob": "Publier une offre",
+      "pricing": "Tarifs"
+    },
+    "company": {
+      "aboutUs": "À propos",
+      "careers": "Carrières",
+      "blog": "Blog",
+      "contact": "Contact"
+    },
+    "legal": {
+      "privacy": "Confidentialité",
+      "terms": "Conditions",
+      "cookie": "Cookies",
+      "security": "Sécurité"
+    },
+    "copyright": "© 2026 JobPortal Inc. Tous droits réservés."
+  },
+  "LogoCloud": {
+    "title": "Approuvé par les équipes les plus innovantes au monde"
+  }
+}

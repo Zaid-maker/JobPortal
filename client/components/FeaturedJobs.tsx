@@ -149,7 +149,7 @@ export default function FeaturedJobs() {
                     href={`/jobs/${job.id}`}
                     className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1 group/link"
                   >
-                    View details
+                    {t("viewDetails")}
                     <ArrowRight className="h-3 w-3 group-hover/link:translate-x-0.5 transition-transform" />
                   </Link>
                 </div>

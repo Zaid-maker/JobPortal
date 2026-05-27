@@ -170,7 +170,7 @@ export default function LatestJobs() {
                 href={`/jobs/${job.id}`}
                 className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2.5 rounded-xl text-sm font-bold shadow-lg shadow-blue-500/20 hover:bg-blue-700 hover:shadow-blue-500/40 transition-all opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0"
               >
-                Details
+                {t("viewDetails")}
               </Link>
             </div>
           </motion.div>
