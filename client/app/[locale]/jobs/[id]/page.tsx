@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import { PageWrapper } from "@/components/PageWrapper";
 import { useTranslations } from "next-intl";
 import { getTranslations } from "next-intl/server";
-import { Link } from "@/navigation";
+import { Link, useRouter } from "@/navigation";
 import { 
   MapPin, 
   Clock, 
@@ -21,53 +21,36 @@ import {
   CheckCircle2,
   Zap
 } from "lucide-react";
+import { notFound } from "next/navigation";
 
 type Props = {
   params: Promise<{ id: string; locale: string }>;
 };
 
-// Mock data generator for now
-const getJobData = (id: string) => {
-  return {
-    id,
-    title: id.startsWith("lj") ? "Senior Product Designer" : "Senior Software Engineer",
-    company: id.startsWith("lj") ? "Airbnb" : "Google",
-    location: "Remote / San Francisco, CA",
-    salary: "$160k - $220k",
-    type: "Full-time",
-    postedAt: "2 days ago",
-    description: "We are looking for an exceptional individual to join our growing team. You will be responsible for building and maintaining high-quality applications. You will work closely with other engineers and designers to deliver seamless user experiences.",
-    responsibilities: [
-      "Lead the design and implementation of new features",
-      "Collaborate with cross-functional teams to define requirements",
-      "Mentor junior developers and perform code reviews",
-      "Optimize application performance and scalability"
-    ],
-    requirements: [
-      "5+ years of experience in relevant field",
-      "Strong proficiency in modern technologies (React, Node.js, etc.)",
-      "Excellent communication and problem-solving skills",
-      "Experience with cloud platforms like AWS or GCP"
-    ],
-    benefits: [
-      "Competitive salary and equity package",
-      "Comprehensive health, dental, and vision insurance",
-      "Flexible work-from-home policy",
-      "Annual learning and development budget"
-    ],
-    companyInfo: {
-      website: "https://example.com",
-      employees: "10,000+",
-      founded: "1998",
-      industry: "Technology"
-    }
-  };
-};
+async function getJobData(id: string) {
+  try {
+    const res = await fetch(`http://localhost:3001/api/jobs/${id}`, {
+      next: { revalidate: 60 } // optional: cache for 1 minute
+    });
+    if (!res.ok) return null;
+    return res.json();
+  } catch (error) {
+    console.error("Failed to fetch job data:", error);
+    return null;
+  }
+}
 
 export default async function JobDetailsPage({ params }: Props) {
   const { id } = await params;
-  const job = getJobData(id);
+  const job = await getJobData(id);
   const t = await getTranslations("JobDetails");
+
+  if (!job) {
+    notFound();
+  }
+
+  // Format date helper
+  const postedDate = new Date(job.createdAt).toLocaleDateString();
 
   return (
     <PageWrapper>
@@ -130,15 +113,15 @@ export default async function JobDetailsPage({ params }: Props) {
                   </div>
                   <div className="space-y-1">
                     <span className="text-[10px] uppercase tracking-widest font-extrabold text-zinc-400">Type</span>
-                    <p className="text-zinc-900 dark:text-white font-bold">{job.type}</p>
+                    <p className="text-zinc-900 dark:text-white font-bold uppercase">{job.type}</p>
                   </div>
                   <div className="space-y-1">
                     <span className="text-[10px] uppercase tracking-widest font-extrabold text-zinc-400">Experience</span>
-                    <p className="text-zinc-900 dark:text-white font-bold">5+ Years</p>
+                    <p className="text-zinc-900 dark:text-white font-bold">{job.category}</p>
                   </div>
                   <div className="space-y-1">
                     <span className="text-[10px] uppercase tracking-widest font-extrabold text-zinc-400">Posted</span>
-                    <p className="text-zinc-900 dark:text-white font-bold">{job.postedAt}</p>
+                    <p className="text-zinc-900 dark:text-white font-bold">{postedDate}</p>
                   </div>
                 </div>
               </div>
@@ -155,52 +138,58 @@ export default async function JobDetailsPage({ params }: Props) {
                   </p>
                 </section>
 
-                <section>
-                  <h2 className="text-2xl font-extrabold text-zinc-900 dark:text-white mb-6 flex items-center gap-3">
-                    <div className="w-1.5 h-8 bg-emerald-500 rounded-full" />
-                    {t("responsibilities")}
-                  </h2>
-                  <ul className="space-y-4">
-                    {job.responsibilities.map((item, i) => (
-                      <li key={i} className="flex items-start gap-4">
-                        <CheckCircle2 className="h-6 w-6 text-emerald-500 shrink-0 mt-0.5" />
-                        <span className="text-zinc-600 dark:text-zinc-400 font-medium leading-relaxed">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </section>
+                {job.responsibilities && job.responsibilities.length > 0 && (
+                  <section>
+                    <h2 className="text-2xl font-extrabold text-zinc-900 dark:text-white mb-6 flex items-center gap-3">
+                      <div className="w-1.5 h-8 bg-emerald-500 rounded-full" />
+                      {t("responsibilities")}
+                    </h2>
+                    <ul className="space-y-4">
+                      {job.responsibilities.map((item: string, i: number) => (
+                        <li key={i} className="flex items-start gap-4">
+                          <CheckCircle2 className="h-6 w-6 text-emerald-500 shrink-0 mt-0.5" />
+                          <span className="text-zinc-600 dark:text-zinc-400 font-medium leading-relaxed">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                )}
 
-                <section>
-                  <h2 className="text-2xl font-extrabold text-zinc-900 dark:text-white mb-6 flex items-center gap-3">
-                    <div className="w-1.5 h-8 bg-amber-500 rounded-full" />
-                    {t("requirements")}
-                  </h2>
-                  <ul className="space-y-4">
-                    {job.requirements.map((item, i) => (
-                      <li key={i} className="flex items-start gap-4 text-zinc-600 dark:text-zinc-400 font-medium">
-                        <div className="w-2 h-2 rounded-full bg-amber-500 shrink-0 mt-2.5" />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </section>
+                {job.requirements && job.requirements.length > 0 && (
+                  <section>
+                    <h2 className="text-2xl font-extrabold text-zinc-900 dark:text-white mb-6 flex items-center gap-3">
+                      <div className="w-1.5 h-8 bg-amber-500 rounded-full" />
+                      {t("requirements")}
+                    </h2>
+                    <ul className="space-y-4">
+                      {job.requirements.map((item: string, i: number) => (
+                        <li key={i} className="flex items-start gap-4 text-zinc-600 dark:text-zinc-400 font-medium">
+                          <div className="w-2 h-2 rounded-full bg-amber-500 shrink-0 mt-2.5" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                )}
 
-                <section>
-                  <h2 className="text-2xl font-extrabold text-zinc-900 dark:text-white mb-6 flex items-center gap-3">
-                    <div className="w-1.5 h-8 bg-purple-500 rounded-full" />
-                    {t("benefits")}
-                  </h2>
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    {job.benefits.map((benefit, i) => (
-                      <div key={i} className="flex items-center gap-3 p-4 bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl border border-zinc-100 dark:border-zinc-800">
-                        <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/20 rounded-xl flex items-center justify-center text-purple-600 dark:text-purple-400">
-                          <Zap className="h-5 w-5" />
+                {job.benefits && job.benefits.length > 0 && (
+                  <section>
+                    <h2 className="text-2xl font-extrabold text-zinc-900 dark:text-white mb-6 flex items-center gap-3">
+                      <div className="w-1.5 h-8 bg-purple-500 rounded-full" />
+                      {t("benefits")}
+                    </h2>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      {job.benefits.map((benefit: string, i: number) => (
+                        <div key={i} className="flex items-center gap-3 p-4 bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl border border-zinc-100 dark:border-zinc-800">
+                          <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/20 rounded-xl flex items-center justify-center text-purple-600 dark:text-purple-400">
+                            <Zap className="h-5 w-5" />
+                          </div>
+                          <span className="text-zinc-700 dark:text-zinc-300 font-bold text-sm tracking-tight">{benefit}</span>
                         </div>
-                        <span className="text-zinc-700 dark:text-zinc-300 font-bold text-sm tracking-tight">{benefit}</span>
-                      </div>
-                    ))}
-                  </div>
-                </section>
+                      ))}
+                    </div>
+                  </section>
+                )}
               </div>
             </div>
 
@@ -215,32 +204,40 @@ export default async function JobDetailsPage({ params }: Props) {
                   </div>
                   <div>
                     <h4 className="font-extrabold text-zinc-900 dark:text-white">{job.company}</h4>
-                    <Link href={job.companyInfo.website} className="text-blue-600 dark:text-blue-400 text-sm font-bold flex items-center gap-1 hover:underline">
-                      <Globe className="h-3 w-3" />
-                      Visit Website
-                    </Link>
+                    {job.companyWebsite && (
+                      <Link href={job.companyWebsite} className="text-blue-600 dark:text-blue-400 text-sm font-bold flex items-center gap-1 hover:underline">
+                        <Globe className="h-3 w-3" />
+                        Visit Website
+                      </Link>
+                    )}
                   </div>
                 </div>
 
                 <div className="space-y-6">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-zinc-500 font-bold flex items-center gap-2">
-                      <Users className="h-4 w-4" /> Size
-                    </span>
-                    <span className="text-zinc-900 dark:text-white font-extrabold">{job.companyInfo.employees}</span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-zinc-500 font-bold flex items-center gap-2">
-                      <Calendar className="h-4 w-4" /> Founded
-                    </span>
-                    <span className="text-zinc-900 dark:text-white font-extrabold">{job.companyInfo.founded}</span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-zinc-500 font-bold flex items-center gap-2">
-                      <Briefcase className="h-4 w-4" /> Industry
-                    </span>
-                    <span className="text-zinc-900 dark:text-white font-extrabold">{job.companyInfo.industry}</span>
-                  </div>
+                  {job.companyEmployees && (
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-zinc-500 font-bold flex items-center gap-2">
+                        <Users className="h-4 w-4" /> Size
+                      </span>
+                      <span className="text-zinc-900 dark:text-white font-extrabold">{job.companyEmployees}</span>
+                    </div>
+                  )}
+                  {job.companyFounded && (
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-zinc-500 font-bold flex items-center gap-2">
+                        <Calendar className="h-4 w-4" /> Founded
+                      </span>
+                      <span className="text-zinc-900 dark:text-white font-extrabold">{job.companyFounded}</span>
+                    </div>
+                  )}
+                  {job.companyIndustry && (
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-zinc-500 font-bold flex items-center gap-2">
+                        <Briefcase className="h-4 w-4" /> Industry
+                      </span>
+                      <span className="text-zinc-900 dark:text-white font-extrabold">{job.companyIndustry}</span>
+                    </div>
+                  )}
                 </div>
 
                 <button className="w-full mt-8 py-4 px-6 bg-zinc-950 dark:bg-white text-white dark:text-black rounded-2xl font-extrabold text-sm hover:opacity-90 transition-opacity uppercase tracking-tight">

@@ -1,8 +1,44 @@
-import Link from "next/link";
-import { BriefcaseBusiness, User, Mail, Lock, CheckCircle2 } from "lucide-react";
+"use client";
+
+import { useState } from "react";
+import { Link, useRouter } from "@/navigation";
+import { BriefcaseBusiness, User, Mail, Lock, Loader2 } from "lucide-react";
 import { PageWrapper } from "@/components/PageWrapper";
+import { signUp } from "@/lib/auth-client";
 
 export default function SignupPage() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [role, setRole] = useState("USER");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    const name = formData.get("name") as string;
+
+    await signUp.email({
+      email,
+      password,
+      name,
+      role, // Pass the selected role
+      callbackURL: "/",
+    }, {
+      onSuccess: () => {
+        router.push("/");
+      },
+      onError: (ctx) => {
+        setError(ctx.error.message || "Something went wrong. Please try again.");
+        setLoading(false);
+      }
+    });
+  };
+
   return (
     <PageWrapper>
       <div className="flex min-h-screen flex-col items-center justify-center bg-zinc-50 px-4 py-12 dark:bg-black sm:px-6 lg:px-8">
@@ -23,13 +59,20 @@ export default function SignupPage() {
           </div>
 
           <div className="bg-white p-8 rounded-2xl border border-zinc-200 shadow-sm dark:bg-zinc-950 dark:border-zinc-800">
-            <form className="space-y-6">
+            {error && (
+              <div className="mb-6 rounded-xl bg-red-50 p-4 text-sm font-medium text-red-600 dark:bg-red-900/20 dark:text-red-400">
+                {error}
+              </div>
+            )}
+
+            <form className="space-y-6" onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="text-sm font-semibold">Full Name</label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-zinc-400" />
                     <input
+                      name="name"
                       type="text"
                       required
                       placeholder="John Doe"
@@ -42,6 +85,7 @@ export default function SignupPage() {
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-zinc-400" />
                     <input
+                      name="email"
                       type="email"
                       required
                       placeholder="name@company.com"
@@ -54,18 +98,28 @@ export default function SignupPage() {
               <div className="space-y-2">
                 <label className="text-sm font-semibold">I want to...</label>
                 <div className="grid grid-cols-2 gap-4">
-                  <label className="relative flex cursor-pointer items-center justify-center rounded-xl border border-zinc-200 p-4 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-900">
-                    <input type="radio" name="role" className="peer sr-only" defaultChecked />
-                    <div className="text-center peer-checked:text-blue-600">
-                      <span className="block font-bold">Find a Job</span>
-                    </div>
-                  </label>
-                  <label className="relative flex cursor-pointer items-center justify-center rounded-xl border border-zinc-200 p-4 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-900">
-                    <input type="radio" name="role" className="peer sr-only" />
-                    <div className="text-center peer-checked:text-blue-600">
-                      <span className="block font-bold">Post a Job</span>
-                    </div>
-                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setRole("USER")}
+                    className={`relative flex items-center justify-center rounded-xl border p-4 transition-all ${
+                      role === "USER"
+                        ? "border-blue-600 bg-blue-50 text-blue-600 dark:bg-blue-900/20"
+                        : "border-zinc-200 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-900"
+                    }`}
+                  >
+                    <span className="block font-bold">Find a Job</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setRole("EMPLOYER")}
+                    className={`relative flex items-center justify-center rounded-xl border p-4 transition-all ${
+                      role === "EMPLOYER"
+                        ? "border-blue-600 bg-blue-50 text-blue-600 dark:bg-blue-900/20"
+                        : "border-zinc-200 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-900"
+                    }`}
+                  >
+                    <span className="block font-bold">Post a Job</span>
+                  </button>
                 </div>
               </div>
 
@@ -74,6 +128,7 @@ export default function SignupPage() {
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-zinc-400" />
                   <input
+                    name="password"
                     type="password"
                     required
                     placeholder="••••••••"
@@ -83,8 +138,15 @@ export default function SignupPage() {
                 <p className="text-xs text-zinc-500">Minimum 8 characters with at least one symbol</p>
               </div>
 
-              <button className="w-full rounded-xl bg-blue-600 py-4 font-bold text-white transition-all hover:bg-blue-700 shadow-lg shadow-blue-500/20 active:scale-[0.98]">
-                Get Started
+              <button 
+                disabled={loading}
+                className="flex w-full items-center justify-center rounded-xl bg-blue-600 py-4 font-bold text-white transition-all hover:bg-blue-700 shadow-lg shadow-blue-500/20 active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
+              >
+                {loading ? (
+                  <Loader2 className="h-6 w-6 animate-spin" />
+                ) : (
+                  "Get Started"
+                )}
               </button>
             </form>
 

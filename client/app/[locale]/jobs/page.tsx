@@ -2,27 +2,48 @@
 
 import { useState, useMemo, useEffect, Suspense } from "react";
 import Navbar from "@/components/Navbar";
-import { Filter, Search, X } from "lucide-react";
+import { Filter, Search, X, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { PageWrapper } from "@/components/PageWrapper";
 import { useSearchParams } from "next/navigation";
 
-const DUMMY_JOBS = [
-  { id: 1, title: "Frontend Developer", company: "Meta", location: "Remote", salary: "$120k - $160k", type: "Full-time", level: "Senior Level" },
-  { id: 2, title: "Backend Engineer", company: "Google", location: "Mountain View, CA", salary: "$140k - $190k", type: "Full-time", level: "Mid Level" },
-  { id: 3, title: "UI Designer", company: "Apple", location: "Cupertino, CA", salary: "$110k - $150k", type: "Contract", level: "Senior Level" },
-  { id: 4, title: "Product Manager", company: "Amazon", location: "Seattle, WA", salary: "$130k - $180k", type: "Full-time", level: "Senior Level" },
-  { id: 5, title: "Fullstack Developer", company: "Netflix", location: "Los Gatos, CA", salary: "$150k - $200k", type: "Full-time", level: "Mid Level" },
-  { id: 6, title: "Junior Web Developer", company: "StartUp", location: "Remote", salary: "$60k - $80k", type: "Full-time", level: "Entry Level" },
-];
+interface Job {
+  id: string;
+  title: string;
+  company: string;
+  location: string;
+  salary: string;
+  type: string;
+  category: string;
+}
 
 function JobsContent() {
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get("q") || "";
   
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState(initialQuery);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/api/jobs");
+        if (response.ok) {
+          const data = await response.json();
+          setJobs(data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch jobs:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchJobs();
+  }, []);
 
   useEffect(() => {
     if (initialQuery) {
@@ -31,15 +52,15 @@ function JobsContent() {
   }, [initialQuery]);
 
   const filteredJobs = useMemo(() => {
-    return DUMMY_JOBS.filter((job) => {
+    return jobs.filter((job) => {
       const matchesSearch = job.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
                            job.company.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesType = selectedTypes.length === 0 || selectedTypes.includes(job.type);
-      const matchesLevel = selectedLevels.length === 0 || selectedLevels.includes(job.level);
+      const matchesLevel = selectedLevels.length === 0 || selectedLevels.includes(job.category);
       
       return matchesSearch && matchesType && matchesLevel;
     });
-  }, [searchQuery, selectedTypes, selectedLevels]);
+  }, [jobs, searchQuery, selectedTypes, selectedLevels]);
 
   const toggleType = (type: string) => {
     setSelectedTypes(prev => 
@@ -162,7 +183,12 @@ function JobsContent() {
         </div>
 
         <div className="grid gap-4">
-          {filteredJobs.length > 0 ? (
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-20 bg-white dark:bg-zinc-950 rounded-2xl border border-zinc-200 dark:border-zinc-800">
+              <Loader2 className="h-8 w-8 text-blue-600 animate-spin mb-4" />
+              <p className="text-zinc-500 font-medium">Loading jobs...</p>
+            </div>
+          ) : filteredJobs.length > 0 ? (
             filteredJobs.map((job) => (
               <div key={job.id} className="bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm hover:shadow-md hover:border-blue-100 dark:hover:border-blue-900/30 transition-all dark:bg-zinc-950 dark:border-zinc-800">
                 <div className="flex items-start justify-between">

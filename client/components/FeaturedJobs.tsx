@@ -1,81 +1,53 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { MapPin, Clock, DollarSign, ArrowRight } from "lucide-react";
+import { MapPin, Clock, DollarSign, ArrowRight, Loader2 } from "lucide-react";
 import { Link } from "@/navigation";
 import { useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
+
+interface Job {
+  id: string;
+  title: string;
+  company: string;
+  location: string;
+  salary: string;
+  type: string;
+  createdAt: string;
+}
 
 export default function FeaturedJobs() {
   const t = useTranslations("FeaturedJobs");
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const featuredJobs = [
-    {
-      id: 1,
-      title: "Senior Software Engineer",
-      company: "Google",
-      location: "Mountain View, CA",
-      salary: "$150k - $210k",
-      type: t("types.fullTime"),
-      postedAt: "12h ago",
-      logoBg: "bg-blue-100",
-      color: "text-blue-600"
-    },
-    {
-      id: 2,
-      title: "Product Designer",
-      company: "Meta",
-      location: t("locations.remote"),
-      salary: "$130k - $180k",
-      type: t("types.fullTime"),
-      postedAt: "2d ago",
-      logoBg: "bg-indigo-100",
-      color: "text-indigo-600"
-    },
-    {
-      id: 3,
-      title: "Backend Developer",
-      company: "Amazon",
-      location: "Seattle, WA",
-      salary: "$140k - $195k",
-      type: t("types.contract"),
-      postedAt: "1d ago",
-      logoBg: "bg-orange-100",
-      color: "text-orange-600"
-    },
-    {
-      id: 4,
-      title: "Frontend Lead",
-      company: "Apple",
-      location: "Cupertino, CA",
-      salary: "$160k - $220k",
-      type: t("types.fullTime"),
-      postedAt: "5h ago",
-      logoBg: "bg-zinc-100",
-      color: "text-zinc-900"
-    },
-    {
-      id: 5,
-      title: "Machine Learning Engineer",
-      company: "Netflix",
-      location: "Los Gatos, CA",
-      salary: "$180k - $250k",
-      type: t("types.fullTime"),
-      postedAt: "3d ago",
-      logoBg: "bg-red-100",
-      color: "text-red-600"
-    },
-    {
-      id: 6,
-      title: "DevOps Architect",
-      company: "Microsoft",
-      location: t("locations.remote"),
-      salary: "$155k - $215k",
-      type: t("types.fullTime"),
-      postedAt: "1w ago",
-      logoBg: "bg-sky-100",
-      color: "text-sky-600"
-    }
-  ];
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/api/jobs");
+        if (response.ok) {
+          const data = await response.json();
+          // For featured, we'll just take the first 6 for now
+          setJobs(data.slice(0, 6));
+        }
+      } catch (error) {
+        console.error("Failed to fetch featured jobs:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchJobs();
+  }, []);
+
+  const getLogoBg = (index: number) => {
+    const bgs = ["bg-blue-100", "bg-indigo-100", "bg-orange-100", "bg-zinc-100", "bg-red-100", "bg-sky-100"];
+    return bgs[index % bgs.length];
+  };
+
+  const getTextColor = (index: number) => {
+    const colors = ["text-blue-600", "text-indigo-600", "text-orange-600", "text-zinc-900", "text-red-600", "text-sky-600"];
+    return colors[index % colors.length];
+  };
 
   return (
     <section className="py-24 bg-white dark:bg-black/50 relative overflow-hidden">
@@ -101,62 +73,67 @@ export default function FeaturedJobs() {
           </Link>
         </div>
 
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {featuredJobs.map((job, index) => (
-            <motion.div
-              key={job.id}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: index * 0.1 }}
-              whileHover={{ y: -5 }}
-              className="group relative bg-zinc-50 dark:bg-zinc-900/40 p-8 rounded-4xl border border-zinc-100 dark:border-zinc-800 hover:border-blue-500/30 transition-all duration-300 shadow-sm"
-            >
-              <div className="flex justify-between items-start mb-6">
-                <div className={`w-14 h-14 ${job.logoBg} rounded-2xl flex items-center justify-center font-bold text-xl ${job.color} shadow-inner`}>
-                  {job.company[0]}
+        {loading ? (
+            <div className="flex flex-col items-center justify-center py-20 bg-white dark:bg-zinc-950 rounded-4xl border border-zinc-100 dark:border-zinc-800">
+                <Loader2 className="h-8 w-8 text-blue-600 animate-spin mb-4" />
+                <p className="text-zinc-500 font-medium tracking-tight">Discovering opportunities...</p>
+            </div>
+        ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {jobs.map((job, index) => (
+                <motion.div
+                key={job.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="group p-8 rounded-4xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 hover:border-blue-500/30 hover:shadow-2xl hover:shadow-blue-500/5 transition-all duration-500"
+                >
+                <div className="flex items-start justify-between mb-8">
+                    <div className={`w-14 h-14 ${getLogoBg(index)} rounded-2xl flex items-center justify-center text-xl font-black ${getTextColor(index)} transform group-hover:scale-110 transition-transform duration-500`}>
+                    {job.company[0]}
+                    </div>
+                    <div className="bg-zinc-50 dark:bg-zinc-800 px-3 py-1 rounded-full text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
+                    {job.type}
+                    </div>
                 </div>
-                <span className="px-3 py-1 bg-white dark:bg-zinc-800 rounded-lg text-[10px] font-extrabold uppercase tracking-wider shadow-sm border border-zinc-100 dark:border-zinc-700">
-                  {job.type}
-                </span>
-              </div>
-
-              <div className="space-y-4">
+                
                 <div>
-                  <h3 className="text-xl font-extrabold text-zinc-900 dark:text-white group-hover:text-blue-600 transition-colors leading-tight">
+                    <h3 className="text-xl font-extrabold text-zinc-900 dark:text-white mb-2 group-hover:text-blue-600 transition-colors tracking-tight">
                     {job.title}
-                  </h3>
-                  <p className="text-zinc-500 dark:text-zinc-400 font-bold text-sm mt-1">{job.company}</p>
+                    </h3>
+                    <p className="text-zinc-500 dark:text-zinc-400 font-bold text-sm mb-6 flex items-center gap-1">
+                    {job.company}
+                    </p>
+                    
+                    <div className="space-y-4">
+                    <div className="flex items-center gap-3 text-zinc-500 dark:text-zinc-400 text-sm font-medium">
+                        <MapPin className="h-4 w-4 text-rose-500" />
+                        {job.location}
+                    </div>
+                    <div className="flex items-center gap-3 text-zinc-900 dark:text-zinc-100 text-sm font-bold">
+                        <DollarSign className="h-4 w-4 text-emerald-500" />
+                        {job.salary}
+                    </div>
+                    </div>
                 </div>
-
-                <div className="flex flex-wrap gap-y-2 gap-x-4 text-xs font-bold text-zinc-400 uppercase tracking-tighter">
-                  <div className="flex items-center gap-1.5">
-                    <MapPin className="h-4 w-4 text-zinc-300" />
-                    {job.location}
-                  </div>
-                  <div className="flex items-center gap-1.5 font-sans">
-                    <DollarSign className="h-4 w-4 text-emerald-500" />
-                    {job.salary}
-                  </div>
-                </div>
-
-                <div className="pt-4 flex items-center justify-between">
-                  <span className="text-[10px] text-zinc-400 font-bold flex items-center gap-1">
+                
+                <div className="mt-8 pt-8 border-t border-zinc-50 dark:border-zinc-800 flex items-center justify-between">
+                    <span className="text-[10px] items-center gap-1.5 text-zinc-400 font-bold uppercase tracking-widest flex">
                     <Clock className="h-3 w-3" />
-                    {job.postedAt}
-                  </span>
-                  <Link 
-                    href={`/jobs/${job.id}`}
-                    className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1 group/link"
-                  >
+                    {new Date(job.createdAt).toLocaleDateString()}
+                    </span>
+                    <Link 
+                    href={`/jobs/${job.id}`} 
+                    className="text-sm font-extrabold text-blue-600 hover:text-blue-700 underline underline-offset-4 decoration-2"
+                    >
                     {t("viewDetails")}
-                    <ArrowRight className="h-3 w-3 group-hover/link:translate-x-0.5 transition-transform" />
-                  </Link>
+                    </Link>
                 </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+                </motion.div>
+            ))}
+            </div>
+        )}
       </div>
     </section>
   );

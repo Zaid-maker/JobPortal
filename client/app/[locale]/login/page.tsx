@@ -1,8 +1,40 @@
-import Link from "next/link";
-import { BriefcaseBusiness, Mail, Lock, ArrowRight } from "lucide-react";
+"use client";
+
+import { useState } from "react";
+import { Link, useRouter } from "@/navigation";
+import { BriefcaseBusiness, Mail, Lock, ArrowRight, Loader2 } from "lucide-react";
 import { PageWrapper } from "@/components/PageWrapper";
+import { signIn } from "@/lib/auth-client";
 
 export default function LoginPage() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+
+    await signIn.email({
+      email,
+      password,
+      callbackURL: "/",
+    }, {
+      onSuccess: () => {
+        router.push("/");
+      },
+      onError: (ctx) => {
+        setError(ctx.error.message || "Invalid email or password");
+        setLoading(false);
+      }
+    });
+  };
+
   return (
     <PageWrapper>
       <div className="flex min-h-screen flex-col items-center justify-center bg-zinc-50 px-4 py-12 dark:bg-black sm:px-6 lg:px-8">
@@ -23,12 +55,19 @@ export default function LoginPage() {
           </div>
 
           <div className="mt-8 bg-white p-8 rounded-2xl border border-zinc-200 shadow-sm dark:bg-zinc-950 dark:border-zinc-800">
-            <form className="space-y-6">
+            {error && (
+              <div className="mb-6 rounded-xl bg-red-50 p-4 text-sm font-medium text-red-600 dark:bg-red-900/20 dark:text-red-400">
+                {error}
+              </div>
+            )}
+
+            <form className="space-y-6" onSubmit={handleSubmit}>
               <div className="space-y-2">
                 <label className="text-sm font-semibold">Email address</label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-zinc-400" />
                   <input
+                    name="email"
                     type="email"
                     required
                     placeholder="name@company.com"
@@ -47,6 +86,7 @@ export default function LoginPage() {
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-zinc-400" />
                   <input
+                    name="password"
                     type="password"
                     required
                     placeholder="••••••••"
@@ -55,9 +95,18 @@ export default function LoginPage() {
                 </div>
               </div>
 
-              <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 py-3.5 font-bold text-white transition-all hover:bg-blue-700 shadow-lg shadow-blue-500/20 active:scale-[0.98]">
-                Log in
-                <ArrowRight className="h-5 w-5" />
+              <button 
+                disabled={loading}
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 py-3.5 font-bold text-white transition-all hover:bg-blue-700 shadow-lg shadow-blue-500/20 active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
+              >
+                {loading ? (
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                ) : (
+                  <>
+                    Log in
+                    <ArrowRight className="h-5 w-5" />
+                  </>
+                )}
               </button>
             </form>
 

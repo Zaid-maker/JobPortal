@@ -10,6 +10,7 @@
     "i18n:sync": "bun scripts/sync-i18n.ts"
   },
   "dependencies": {
+    "better-auth": "^1.6.11",
     "framer-motion": "^12.40.0",
     "lucide-react": "^1.16.0",
     "next": "16.2.6",

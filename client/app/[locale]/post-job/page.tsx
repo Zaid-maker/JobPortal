@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import { PageWrapper } from "@/components/PageWrapper";
 import { 
@@ -13,9 +13,13 @@ import {
   ChevronLeft,
   Sparkles,
   Building2,
-  Users
+  Users,
+  Loader2,
+  Lock
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSession } from "@/lib/auth-client";
+import { useRouter } from "@/navigation";
 
 const STEPS = [
   { id: 1, title: "Basic Info", icon: Briefcase },
@@ -25,20 +29,84 @@ const STEPS = [
 ];
 
 export default function PostJobPage() {
+  const router = useRouter();
+  const { data: session, isPending } = useSession();
   const [currentStep, setCurrentStep] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     type: "Full-time",
-    category: "Engineering",
+    category: "Entry Level",
     location: "",
     salaryMin: "",
     salaryMax: "",
     description: "",
-    requirements: "",
   });
 
   const nextStep = () => setCurrentStep((prev) => Math.min(prev + 1, STEPS.length));
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1));
+
+  const handleSubmit = async () => {
+    if (!session) return;
+    setIsSubmitting(true);
+    
+    try {
+      const response = await fetch("http://localhost:3001/api/jobs", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...formData,
+          company: "My Company", // Should be from employer profile in real app
+          salary: `$${formData.salaryMin} - $${formData.salaryMax}`,
+          responsibilities: [], 
+          requirements: [],
+          benefits: [],
+        }),
+      });
+
+      if (response.ok) {
+        const job = await response.json();
+        router.push(`/jobs/${job.id}`);
+      } else {
+        const error = await response.json();
+        alert(error.error || "Failed to publish job");
+      }
+    } catch (error) {
+      console.error("Error publishing job:", error);
+      alert("Something went wrong");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  if (isPending) return null;
+
+  if (!session || (session.user as any).role !== "EMPLOYER") {
+    return (
+      <PageWrapper>
+        <div className="min-h-screen bg-zinc-50 dark:bg-black">
+          <Navbar />
+          <div className="mx-auto max-w-7xl px-4 py-32 text-center">
+            <div className="mx-auto w-16 h-16 bg-red-100 dark:bg-red-900/20 rounded-2xl flex items-center justify-center text-red-600 mb-6">
+              <Lock className="h-8 w-8" />
+            </div>
+            <h1 className="text-3xl font-extrabold mb-4">Employer Access Required</h1>
+            <p className="text-zinc-500 mb-8 max-w-md mx-auto">
+                Only accounts with the Employer role can post job listings. Please log in with an employer account or contact support.
+            </p>
+            <button 
+                onClick={() => router.push("/login")}
+                className="bg-zinc-900 dark:bg-white text-white dark:text-black px-8 py-3 rounded-xl font-bold"
+            >
+                Back to Login
+            </button>
+          </div>
+        </div>
+      </PageWrapper>
+    );
+  }
 
   return (
     <PageWrapper>
@@ -90,15 +158,15 @@ export default function PostJobPage() {
                   {currentStep === 1 && (
                     <div className="space-y-6">
                       <header>
-                        <h2 className="text-2xl font-bold">First, let's get the basics</h2>
-                        <p className="text-zinc-500 mt-1">What role are you hiring for?</p>
+                        <h2 className="text-2xl font-bold tracking-tight">First, let's get the basics</h2>
+                        <p className="text-zinc-500 mt-1 font-medium">What role are you hiring for?</p>
                       </header>
                       <div className="space-y-4 pt-4">
                         <div className="space-y-2">
-                          <label className="text-sm font-semibold">Job Title</label>
+                          <label className="text-sm font-bold uppercase tracking-wider text-zinc-400">Job Title</label>
                           <input 
                             type="text" 
-                            className="w-full rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 bg-transparent focus:ring-2 focus:ring-blue-600 outline-none transition-all"
+                            className="w-full rounded-2xl border border-zinc-200 dark:border-zinc-800 p-4 bg-transparent focus:ring-2 focus:ring-blue-600 outline-none transition-all font-medium"
                             placeholder="e.g. Senior Frontend Engineer"
                             value={formData.title}
                             onChange={(e) => setFormData({...formData, title: e.target.value})}
@@ -106,23 +174,22 @@ export default function PostJobPage() {
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div className="space-y-2">
-                            <label className="text-sm font-semibold">Job Category</label>
+                            <label className="text-sm font-bold uppercase tracking-wider text-zinc-400">Experience Level</label>
                             <select 
-                              className="w-full rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 bg-white dark:bg-zinc-950 focus:ring-2 focus:ring-blue-600 outline-none transition-all appearance-none"
+                              className="w-full rounded-2xl border border-zinc-200 dark:border-zinc-800 p-4 bg-white dark:bg-zinc-950 focus:ring-2 focus:ring-blue-600 outline-none transition-all appearance-none font-medium"
                               value={formData.category}
                               onChange={(e) => setFormData({...formData, category: e.target.value})}
                             >
-                              <option>Engineering</option>
-                              <option>Design</option>
-                              <option>Marketing</option>
-                              <option>Sales</option>
-                              <option>Product</option>
+                              <option>Entry Level</option>
+                              <option>Mid Level</option>
+                              <option>Senior Level</option>
+                              <option>Director</option>
                             </select>
                           </div>
                           <div className="space-y-2">
-                            <label className="text-sm font-semibold">Job Type</label>
+                            <label className="text-sm font-bold uppercase tracking-wider text-zinc-400">Job Type</label>
                             <select 
-                              className="w-full rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 bg-white dark:bg-zinc-950 focus:ring-2 focus:ring-blue-600 outline-none transition-all appearance-none"
+                              className="w-full rounded-2xl border border-zinc-200 dark:border-zinc-800 p-4 bg-white dark:bg-zinc-950 focus:ring-2 focus:ring-blue-600 outline-none transition-all appearance-none font-medium"
                               value={formData.type}
                               onChange={(e) => setFormData({...formData, type: e.target.value})}
                             >
@@ -141,17 +208,17 @@ export default function PostJobPage() {
                   {currentStep === 2 && (
                     <div className="space-y-6">
                       <header>
-                        <h2 className="text-2xl font-bold">Location & Compensation</h2>
-                        <p className="text-zinc-500 mt-1">Help candidates understand the setup.</p>
+                        <h2 className="text-2xl font-bold tracking-tight">Location & Compensation</h2>
+                        <p className="text-zinc-500 mt-1 font-medium">Help candidates understand the setup.</p>
                       </header>
                       <div className="space-y-4 pt-4">
                         <div className="space-y-2">
-                          <label className="text-sm font-semibold">Job Location</label>
+                          <label className="text-sm font-bold uppercase tracking-wider text-zinc-400">Job Location</label>
                           <div className="relative">
                             <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-zinc-400" />
                             <input 
                               type="text" 
-                              className="w-full rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 pl-12 bg-transparent focus:ring-2 focus:ring-blue-600 outline-none transition-all"
+                              className="w-full rounded-2xl border border-zinc-200 dark:border-zinc-800 p-4 pl-12 bg-transparent focus:ring-2 focus:ring-blue-600 outline-none transition-all font-medium"
                               placeholder="e.g. Remote or San Francisco, CA"
                               value={formData.location}
                               onChange={(e) => setFormData({...formData, location: e.target.value})}
@@ -160,12 +227,12 @@ export default function PostJobPage() {
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div className="space-y-2">
-                            <label className="text-sm font-semibold">Minimum Salary (Annual)</label>
+                            <label className="text-sm font-bold uppercase tracking-wider text-zinc-400">Min Salary (Annual)</label>
                             <div className="relative">
-                              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400">$</span>
+                              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 font-bold">$</span>
                               <input 
                                 type="text" 
-                                className="w-full rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 pl-8 bg-transparent focus:ring-2 focus:ring-blue-600 outline-none transition-all"
+                                className="w-full rounded-2xl border border-zinc-200 dark:border-zinc-800 p-4 pl-8 bg-transparent focus:ring-2 focus:ring-blue-600 outline-none transition-all font-medium"
                                 placeholder="80,000"
                                 value={formData.salaryMin}
                                 onChange={(e) => setFormData({...formData, salaryMin: e.target.value})}
@@ -173,12 +240,12 @@ export default function PostJobPage() {
                             </div>
                           </div>
                           <div className="space-y-2">
-                            <label className="text-sm font-semibold">Maximum Salary (Annual)</label>
+                            <label className="text-sm font-bold uppercase tracking-wider text-zinc-400">Max Salary (Annual)</label>
                             <div className="relative">
-                              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400">$</span>
+                              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 font-bold">$</span>
                               <input 
                                 type="text" 
-                                className="w-full rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 pl-8 bg-transparent focus:ring-2 focus:ring-blue-600 outline-none transition-all"
+                                className="w-full rounded-2xl border border-zinc-200 dark:border-zinc-800 p-4 pl-8 bg-transparent focus:ring-2 focus:ring-blue-600 outline-none transition-all font-medium"
                                 placeholder="120,000"
                                 value={formData.salaryMax}
                                 onChange={(e) => setFormData({...formData, salaryMax: e.target.value})}
@@ -276,10 +343,21 @@ export default function PostJobPage() {
                 </button>
               ) : (
                 <button 
-                  className="flex items-center gap-2 px-8 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/20"
+                  onClick={handleSubmit}
+                  disabled={isSubmitting}
+                  className="flex items-center gap-2 px-8 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/20 disabled:opacity-50"
                 >
-                  Publish Job Listing
-                  <CheckCircle2 className="h-5 w-5" />
+                  {isSubmitting ? (
+                    <>
+                      Publishing...
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                    </>
+                  ) : (
+                    <>
+                      Publish Job Listing
+                      <CheckCircle2 className="h-5 w-5" />
+                    </>
+                  )}
                 </button>
               )}
             </div>
