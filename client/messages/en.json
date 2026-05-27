@@ -19,18 +19,22 @@
   "Stats": {
     "activeJobs": {
       "label": "Active Jobs",
+      "value": "25k+",
       "description": "Openings across all disciplines"
     },
     "companies": {
       "label": "Companies",
+      "value": "10k+",
       "description": "From startups to Fortune 500s"
     },
     "candidates": {
       "label": "Candidates",
+      "value": "500k+",
       "description": "Talented professionals hired"
     },
     "successRate": {
       "label": "Success Rate",
+      "value": "94%",
       "description": "Match accuracy for employers"
     }
   },
@@ -38,12 +42,53 @@
     "badge": "Premium Listings",
     "title": "Featured Opportunities",
     "subtitle": "Find your next career milestone with these hand-picked listings from world-class engineering teams.",
-    "viewAll": "Explore all 2,500+ jobs"
+    "btnExplore": "Explore all 2,500+ jobs",
+    "types": {
+      "fullTime": "Full-time",
+      "contract": "Contract"
+    },
+    "locations": {
+      "remote": "Remote"
+    }
   },
   "LatestJobs": {
     "badge": "Newly Added",
     "title": "Latest Job Openings",
-    "viewAll": "View all jobs",
-    "details": "Details"
+    "btnViewAll": "View all jobs",
+    "details": "Details",
+    "types": {
+      "fullTime": "Full-time",
+      "contract": "Contract"
+    },
+    "locations": {
+      "remote": "Remote"
+    }
+  },
+  "Footer": {
+    "brandDescription": "The premium career platform for the next generation of builders. Find your next challenge or build your team.",
+    "titles": {
+      "product": "Product",
+      "company": "Company",
+      "legal": "Legal"
+    },
+    "product": {
+      "findJobs": "Find Jobs",
+      "companies": "Companies",
+      "postJob": "Post a Job",
+      "pricing": "Pricing"
+    },
+    "company": {
+      "aboutUs": "About Us",
+      "careers": "Careers",
+      "blog": "Blog",
+      "contact": "Contact"
+    },
+    "legal": {
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service",
+      "cookie": "Cookie Policy",
+      "security": "Security"
+    },
+    "copyright": "© 2026 JobPortal Inc. All rights reserved."
   }
 }

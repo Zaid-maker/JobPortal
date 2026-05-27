@@ -19,18 +19,22 @@
   "Stats": {
     "activeJobs": {
       "label": "Empleos activos",
+      "value": "25k+",
       "description": "Vacantes en todas las disciplinas"
     },
     "companies": {
       "label": "Empresas",
+      "value": "10k+",
       "description": "Desde startups hasta Fortune 500"
     },
     "candidates": {
       "label": "Candidatos",
+      "value": "500k+",
       "description": "Profesionales talentosos contratados"
     },
     "successRate": {
       "label": "Tasa de éxito",
+      "value": "94%",
       "description": "Precisión de emparejamiento para empleadores"
     }
   },
@@ -38,12 +42,53 @@
     "badge": "Listados Premium",
     "title": "Oportunidades destacadas",
     "subtitle": "Encuentra tu próximo hito profesional con estos listados seleccionados de equipos de ingeniería de clase mundial.",
-    "viewAll": "Explora más de 2500 empleos"
+    "btnExplore": "Explora más de 2500 empleos",
+    "types": {
+      "fullTime": "Tiempo completo",
+      "contract": "Contrato"
+    },
+    "locations": {
+      "remote": "Remoto"
+    }
   },
   "LatestJobs": {
     "badge": "Recién añadidos",
     "title": "Últimas ofertas de empleo",
-    "viewAll": "Ver todos los empleos",
-    "details": "Detalles"
+    "btnViewAll": "Ver todos los empleos",
+    "details": "Detalles",
+    "types": {
+      "fullTime": "Tiempo completo",
+      "contract": "Contrato"
+    },
+    "locations": {
+      "remote": "Remoto"
+    }
+  },
+  "Footer": {
+    "brandDescription": "La plataforma de carrera premium para la próxima generación de creadores. Encuentra tu próximo desafío o construye tu equipo.",
+    "titles": {
+      "product": "Producto",
+      "company": "Compañía",
+      "legal": "Legal"
+    },
+    "product": {
+      "findJobs": "Buscar empleos",
+      "companies": "Empresas",
+      "postJob": "Publicar un empleo",
+      "pricing": "Precios"
+    },
+    "company": {
+      "aboutUs": "Sobre nosotros",
+      "careers": "Carreras",
+      "blog": "Blog",
+      "contact": "Contacto"
+    },
+    "legal": {
+      "privacy": "Política de privacidad",
+      "terms": "Términos de servicio",
+      "cookie": "Política de cookies",
+      "security": "Seguridad"
+    },
+    "copyright": "© 2026 JobPortal Inc. Todos los derechos reservados."
   }
 }
