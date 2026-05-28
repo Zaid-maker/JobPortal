@@ -22,6 +22,7 @@ import {
   Zap
 } from "lucide-react";
 import { notFound } from "next/navigation";
+import ApplyButton from "@/components/ApplyButton";
 
 type Props = {
   params: Promise<{ id: string; locale: string }>;
@@ -96,10 +97,7 @@ export default async function JobDetailsPage({ params }: Props) {
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    <button className="flex-1 md:flex-none bg-blue-600 text-white px-8 py-4 rounded-2xl font-bold hover:bg-blue-700 transition-all shadow-xl shadow-blue-500/20 active:scale-95 flex items-center gap-2 uppercase">
-                      <Zap className="h-5 w-5 fill-current" />
-                      {t("applyNow")}
-                    </button>
+                    <ApplyButton jobId={job.id} />
                     <button className="p-4 rounded-2xl border border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-zinc-400 hover:text-rose-500 transition-all shadow-sm">
                       <Bookmark className="h-6 w-6" />
                     </button>

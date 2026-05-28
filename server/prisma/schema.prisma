@@ -19,6 +19,8 @@ model User {
 
   // Custom fields for JobPortal
   role          String    @default("USER") // USER, EMPLOYER, ADMIN
+  applications  Application[]
+  savedJobs     SavedJob[]
 
   @@map("user")
 }
@@ -87,4 +89,35 @@ model Job {
   postedById       String
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
+
+  applications     Application[]
+  savedBy          SavedJob[]
+}
+
+model Application {
+  id        String   @id @default(cuid())
+  jobId     String
+  userId    String
+  resume    String?  // URL to resume
+  coverLetter String?
+  status    String   @default("PENDING") // PENDING, INTERVIEWING, OFFERED, DECLINED
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  job       Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([jobId, userId])
+}
+
+model SavedJob {
+  id        String   @id @default(cuid())
+  jobId     String
+  userId    String
+  createdAt DateTime @default(now())
+
+  job       Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([jobId, userId])
 }

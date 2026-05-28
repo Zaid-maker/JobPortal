@@ -4,10 +4,11 @@ import { useState, useEffect } from "react";
 import { Search, MapPin, Sparkles, TrendingUp, Users, Building } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "@/navigation";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 export default function Hero() {
   const t = useTranslations("Hero");
+  const locale = useLocale();
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [displayText, setDisplayText] = useState("");
@@ -15,7 +16,6 @@ export default function Hero() {
   // Typewriter effect logic
   useEffect(() => {
     // Get the localized text from the translation
-    // We strip tags if needed, but here we just want the text content
     const fullText = t("typewriterWord") || "career potential";
     let i = 0;
     const speed = 100; // ms per character
@@ -32,7 +32,7 @@ export default function Hero() {
     }, speed);
     
     return () => clearInterval(timer);
-  }, [t]);
+  }, [t, locale]);
 
   const handleSearch = () => {
     if (query.trim()) {

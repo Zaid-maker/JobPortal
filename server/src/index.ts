@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { auth } from "./auth/auth";
 import jobs from "./routes/jobs";
+import applications from "./routes/applications";
 
 const app = new Hono();
 
@@ -22,6 +23,9 @@ app.on(["POST", "GET"], "/api/auth/**", (c) => {
 
 // Jobs Routes
 app.route("/api/jobs", jobs);
+
+// Applications Routes
+app.route("/api/applications", applications);
 
 // Health check
 app.get("/", (c) => {

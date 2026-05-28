@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, Globe } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { usePathname, useRouter } from "@/navigation";
 import { useLocale } from "next-intl";
 
@@ -15,6 +15,7 @@ const languages = [
 ];
 
 export default function LanguageSwitcher() {
+  const [isPending, startTransition] = useTransition();
   const [isOpen, setIsOpen] = useState(false);
   const locale = useLocale();
   const pathname = usePathname();
@@ -36,16 +37,21 @@ export default function LanguageSwitcher() {
 
   const handleLanguageChange = (langCode: string) => {
     setIsOpen(false);
-    router.replace(pathname, { locale: langCode });
+    startTransition(() => {
+      router.replace(pathname, { locale: langCode });
+    });
   };
 
   return (
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-zinc-600 hover:text-blue-600 dark:text-zinc-400 dark:hover:text-blue-400 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all border border-transparent hover:border-zinc-200 dark:hover:border-zinc-800"
+        disabled={isPending}
+        className={`flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg transition-all border border-transparent ${
+          isPending ? "opacity-50 cursor-not-allowed" : "text-zinc-600 hover:text-blue-600 dark:text-zinc-400 dark:hover:text-blue-400 hover:bg-zinc-50 dark:hover:bg-zinc-900 hover:border-zinc-200 dark:hover:border-zinc-800"
+        }`}
       >
-        <Globe className="h-4 w-4" />
+        <Globe className={`h-4 w-4 ${isPending ? "animate-spin" : ""}`} />
         <span className="hidden sm:inline">{currentLang.name}</span>
         <span className="sm:hidden">{currentLang.flag}</span>
         <ChevronDown className={`h-3 w-3 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />

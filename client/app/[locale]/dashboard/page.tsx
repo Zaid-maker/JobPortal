@@ -12,48 +12,100 @@ import {
   ChevronRight,
   TrendingUp,
   MapPin,
-  Calendar
+  Calendar,
+  Loader2
 } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useSession } from "@/lib/auth-client";
+import { useEffect, useState } from "react";
 
-const STATS = [
-  { label: "Total Applications", value: "12", icon: Briefcase, color: "text-blue-600", bg: "bg-blue-50 dark:bg-blue-900/20" },
-  { label: "Interviews", value: "3", icon: Clock, color: "text-purple-600", bg: "bg-purple-50 dark:bg-purple-900/20" },
-  { label: "Offers", value: "1", icon: CheckCircle2, color: "text-emerald-600", bg: "bg-emerald-50 dark:bg-emerald-900/20" },
-];
-
-const RECENT_APPLICATIONS = [
-  {
-    id: 1,
-    company: "Meta",
-    role: "Senior Frontend Developer",
-    date: "2 days ago",
-    status: "Interviewing",
-    statusColor: "text-purple-600 bg-purple-50 dark:bg-purple-900/20 dark:text-purple-400",
-    location: "Remote",
-  },
-  {
-    id: 2,
-    company: "Google",
-    role: "Backend Engineer",
-    date: "5 days ago",
-    status: "Applied",
-    statusColor: "text-blue-600 bg-blue-50 dark:bg-blue-900/20 dark:text-blue-400",
-    location: "Mountain View, CA",
-  },
-  {
-    id: 3,
-    company: "Apple",
-    role: "UI Designer",
-    date: "1 week ago",
-    status: "Declined",
-    statusColor: "text-zinc-500 bg-zinc-50 dark:bg-zinc-900/50 dark:text-zinc-400",
-    location: "Cupertino, CA",
-  },
-];
+type Application = {
+  id: string;
+  status: string;
+  createdAt: string;
+  job: {
+    id: string;
+    title: string;
+    company: string;
+    location: string;
+  };
+};
 
 export default function DashboardPage() {
+  const { data: session, isPending: sessionLoading } = useSession();
+  const [applications, setApplications] = useState<Application[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchApplications = async () => {
+      try {
+        const res = await fetch("http://localhost:3001/api/applications/me", {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setApplications(data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch applications:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (session) {
+      fetchApplications();
+    }
+  }, [session]);
+
+  const stats = [
+    { 
+      label: "Total Applications", 
+      value: applications.length.toString(), 
+      icon: Briefcase, 
+      color: "text-blue-600", 
+      bg: "bg-blue-50 dark:bg-blue-900/20" 
+    },
+    { 
+      label: "Interviewing", 
+      value: applications.filter(a => a.status === "INTERVIEWING").length.toString(), 
+      icon: Clock, 
+      color: "text-purple-600", 
+      bg: "bg-purple-50 dark:bg-purple-900/20" 
+    },
+    { 
+      label: "Offers", 
+      value: applications.filter(a => a.status === "OFFERED").length.toString(), 
+      icon: CheckCircle2, 
+      color: "text-emerald-600", 
+      bg: "bg-emerald-50 dark:bg-emerald-900/20" 
+    },
+  ];
+
+  const getStatusStyles = (status: string) => {
+    switch (status) {
+      case "INTERVIEWING":
+        return "text-purple-600 bg-purple-50 dark:bg-purple-900/20 dark:text-purple-400";
+      case "OFFERED":
+        return "text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 dark:text-emerald-400";
+      case "DECLINED":
+        return "text-rose-600 bg-rose-50 dark:bg-rose-900/20 dark:text-rose-400";
+      default:
+        return "text-blue-600 bg-blue-50 dark:bg-blue-900/20 dark:text-blue-400";
+    }
+  };
+
+  if (sessionLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-zinc-50 dark:bg-black">
+        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+      </div>
+    );
+  }
+
   return (
     <PageWrapper>
       <div className="min-h-screen bg-zinc-50 dark:bg-black text-zinc-900 dark:text-zinc-100">
@@ -63,8 +115,10 @@ export default function DashboardPage() {
           {/* Header Section */}
           <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-extrabold tracking-tight">Welcome back, Alex 👋</h1>
-              <p className="text-zinc-600 dark:text-zinc-400 mt-1">Here's what's happening with your job applications.</p>
+              <h1 className="text-3xl font-extrabold tracking-tight">
+                Welcome back, {session?.user?.name?.split(' ')[0] || 'User'} 👋
+              </h1>
+              <p className="text-zinc-600 dark:text-zinc-400 mt-1">Here&apos;s what&apos;s happening with your job applications.</p>
             </div>
             <div className="flex items-center gap-3">
               <button className="flex items-center gap-2 px-4 py-2 border border-zinc-200 dark:border-zinc-800 rounded-xl text-sm font-medium hover:bg-white dark:hover:bg-zinc-900 transition-colors shadow-sm">
@@ -87,7 +141,7 @@ export default function DashboardPage() {
               
               {/* Stats Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                {STATS.map((stat, i) => (
+                {stats.map((stat, i) => (
                   <motion.div
                     key={stat.label}
                     initial={{ opacity: 0, y: 20 }}
@@ -112,37 +166,60 @@ export default function DashboardPage() {
                     View all
                   </Link>
                 </div>
-                <div className="bg-white dark:bg-zinc-950 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden text-sm md:text-base">
-                  <div className="divide-y divide-zinc-100 dark:divide-zinc-900">
-                    {RECENT_APPLICATIONS.map((app) => (
-                      <div key={app.id} className="p-4 md:p-6 hover:bg-zinc-50 dark:hover:bg-zinc-900/50 transition-colors group">
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                          <div className="flex gap-4">
-                            <div className="w-12 h-12 bg-zinc-100 dark:bg-zinc-900 rounded-xl flex items-center justify-center font-bold text-lg text-zinc-400">
-                              {app.company[0]}
-                            </div>
-                            <div>
-                              <h3 className="font-bold group-hover:text-blue-600 transition-colors">{app.role}</h3>
-                              <p className="text-zinc-600 dark:text-zinc-400 text-sm">{app.company} • {app.location}</p>
-                            </div>
-                          </div>
-                          <div className="flex items-center justify-between sm:justify-end gap-4 w-full sm:w-auto">
-                            <div className="text-right hidden md:block">
-                              <div className="text-sm text-zinc-400 flex items-center gap-1 justify-end">
-                                <Calendar className="h-3 w-3" />
-                                {app.date}
+                
+                {loading ? (
+                  <div className="flex bg-white dark:bg-zinc-950 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-12 items-center justify-center">
+                    <Loader2 className="h-6 w-6 animate-spin text-zinc-400" />
+                  </div>
+                ) : applications.length > 0 ? (
+                  <div className="bg-white dark:bg-zinc-950 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden text-sm md:text-base">
+                    <div className="divide-y divide-zinc-100 dark:divide-zinc-900">
+                      {applications.slice(0, 5).map((app) => (
+                        <div key={app.id} className="p-4 md:p-6 hover:bg-zinc-50 dark:hover:bg-zinc-900/50 transition-colors group">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div className="flex gap-4">
+                              <div className="w-12 h-12 bg-zinc-100 dark:bg-zinc-900 rounded-xl flex items-center justify-center font-bold text-lg text-zinc-400">
+                                {app.job.company[0]}
+                              </div>
+                              <div>
+                                <h3 className="font-bold group-hover:text-blue-600 transition-colors">{app.job.title}</h3>
+                                <p className="text-zinc-600 dark:text-zinc-400 text-sm">{app.job.company} • {app.job.location}</p>
                               </div>
                             </div>
-                            <span className={`px-3 py-1 rounded-full text-xs font-bold ${app.statusColor}`}>
-                              {app.status}
-                            </span>
-                            <ChevronRight className="h-5 w-5 text-zinc-300 group-hover:text-blue-600 transition-all group-hover:translate-x-1" />
+                            <div className="flex items-center justify-between sm:justify-end gap-4 w-full sm:w-auto">
+                              <div className="text-right hidden md:block">
+                                <div className="text-sm text-zinc-400 flex items-center gap-1 justify-end">
+                                  <Calendar className="h-3 w-3" />
+                                  {new Date(app.createdAt).toLocaleDateString()}
+                                </div>
+                              </div>
+                              <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${getStatusStyles(app.status)}`}>
+                                {app.status}
+                              </span>
+                              <Link href={`/jobs/${app.job.id}`}>
+                                <ChevronRight className="h-5 w-5 text-zinc-300 group-hover:text-blue-600 transition-all group-hover:translate-x-1" />
+                              </Link>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="bg-white dark:bg-zinc-950 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-12 text-center">
+                    <div className="mx-auto w-12 h-12 bg-zinc-50 dark:bg-zinc-900 rounded-full flex items-center justify-center mb-4 text-zinc-400">
+                      <Briefcase className="h-6 w-6" />
+                    </div>
+                    <h3 className="font-bold text-zinc-900 dark:text-white mb-1">No applications yet</h3>
+                    <p className="text-sm text-zinc-500 mb-6">Start your career journey by applying to your first job.</p>
+                    <Link 
+                      href="/jobs"
+                      className="inline-flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 transition-all shadow-md shadow-blue-500/20"
+                    >
+                      Browse Jobs
+                    </Link>
+                  </div>
+                )}
               </section>
             </div>
 
