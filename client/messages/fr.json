@@ -9,10 +9,11 @@
     "signUp": "S'inscrire"
   },
   "Hero": {
-    "title": "Libérez votre <br /> <span1>potentiel professionnel</span1>",
+    "title": "Libérez votre <br></br> <span1>potentiel professionnel</span1>",
     "subtitle": "Connectez-vous avec des entreprises visionnaires. Des startups aux géants de la technologie, votre prochaine étape commence ici.",
     "search": "Titre du poste, mots-clés ou entreprise",
     "location": "Ville ou département",
+    "typewriterWord": "potentiel professionnel",
     "btnSearch": "Rechercher",
     "badge": "Nouveau : Opportunités à distance ajoutées quotidiennement"
   },

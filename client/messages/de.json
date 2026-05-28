@@ -9,10 +9,11 @@
     "signUp": "Registrieren"
   },
   "Hero": {
-    "title": "Entfesseln Sie Ihr <br /> <span1>Karrierepotenzial</span1>",
+    "title": "Entfesseln Sie Ihr <br></br> <span1>Karrierepotenzial</span1>",
     "subtitle": "Vernetzen Sie sich mit zukunftsorientierten Unternehmen. Von Startups bis hin zu Tech-Giganten – Ihr nächster großer Schritt beginnt hier.",
     "search": "Jobtitel, Keywords oder Unternehmen",
     "location": "Stadt oder Bundesland",
+    "typewriterWord": "Karrierepotenzial",
     "btnSearch": "Jobs suchen",
     "badge": "Neu: Täglich neue Remote-Möglichkeiten"
   },

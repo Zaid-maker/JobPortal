@@ -9,10 +9,11 @@
     "signUp": "Sign up"
   },
   "Hero": {
-    "title": "Unlock your <br /> <span1>career potential</span1>",
+    "title": "Unlock your <br></br> <span1>career potential</span1>",
     "subtitle": "Connect with forward-thinking companies. From startups to tech giants, your next big move starts right here.",
     "search": "Job title, keywords, or company",
     "location": "City or state",
+    "typewriterWord": "career potential",
     "btnSearch": "Search Jobs",
     "badge": "New: Remote opportunities added daily"
   },

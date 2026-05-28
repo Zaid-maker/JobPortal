@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Search, MapPin, Sparkles, TrendingUp, Users, Building } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "@/navigation";
 import { useTranslations } from "next-intl";
 
@@ -10,6 +10,29 @@ export default function Hero() {
   const t = useTranslations("Hero");
   const router = useRouter();
   const [query, setQuery] = useState("");
+  const [displayText, setDisplayText] = useState("");
+  
+  // Typewriter effect logic
+  useEffect(() => {
+    // Get the localized text from the translation
+    // We strip tags if needed, but here we just want the text content
+    const fullText = t("typewriterWord") || "career potential";
+    let i = 0;
+    const speed = 100; // ms per character
+    
+    setDisplayText("");
+    
+    const timer = setInterval(() => {
+      if (i < fullText.length) {
+        setDisplayText(fullText.substring(0, i + 1));
+        i++;
+      } else {
+        clearInterval(timer);
+      }
+    }, speed);
+    
+    return () => clearInterval(timer);
+  }, [t]);
 
   const handleSearch = () => {
     if (query.trim()) {
@@ -59,12 +82,19 @@ export default function Hero() {
             className="text-5xl font-extrabold tracking-tight text-zinc-900 dark:text-white sm:text-6xl md:text-7xl lg:leading-[1.1]"
           >
             {t.rich("title", {
-              br: () => <br className="hidden sm:block" />,
+              br: (chunks) => <br className="hidden sm:block" />,
               span1: (chunks) => (
-                <span className="relative">
-                  <span className="relative z-10 text-blue-600">{chunks}</span>
-                  <svg className="absolute -bottom-2 left-0 w-full h-3 text-blue-200 dark:text-blue-900/40 z-0" viewBox="0 0 100 10" preserveAspectRatio="none">
-                    <path d="M0 5 Q 25 0, 50 5 T 100 5" fill="none" stroke="currentColor" strokeWidth="8" />
+                <span className="relative inline-block min-w-[280px] sm:min-w-[450px]">
+                  <span className="relative z-10 text-blue-600">
+                    {displayText}
+                    <motion.span
+                      animate={{ opacity: [0, 1, 0] }}
+                      transition={{ repeat: Infinity, duration: 0.8 }}
+                      className="inline-block w-[3px] h-[0.8em] bg-blue-600 ml-1 translate-y-1"
+                    />
+                  </span>
+                  <svg className="absolute -bottom-1 left-0 w-full h-[6px] text-blue-500/30 dark:text-blue-400/30 z-0" viewBox="0 0 100 10" preserveAspectRatio="none">
+                    <path d="M0 5 Q 25 0, 50 5 T 100 5" fill="none" stroke="currentColor" strokeWidth="12" />
                   </svg>
                 </span>
               )

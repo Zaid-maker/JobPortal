@@ -9,10 +9,11 @@
     "signUp": "Registrarse"
   },
   "Hero": {
-    "title": "Desbloquea tu <br /> <span1>potencial profesional</span1>",
+    "title": "Desbloquea tu <br></br> <span1>potencial profesional</span1>",
     "subtitle": "Conéctate con empresas visionarias. Desde startups hasta gigantes tecnológicos, tu próximo gran paso comienza aquí.",
     "search": "Título del puesto, palabras clave o empresa",
     "location": "Ciudad o estado",
+    "typewriterWord": "potencial profesional",
     "btnSearch": "Buscar empleos",
     "badge": "Nuevo: Oportunidades remotas añadidas diariamente"
   },
