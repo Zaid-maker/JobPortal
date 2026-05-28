@@ -26,6 +26,7 @@ export default function SignupPage() {
       email,
       password,
       name,
+      // @ts-expect-error
       role, // Pass the selected role
       callbackURL: "/",
     }, {

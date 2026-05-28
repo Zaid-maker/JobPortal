@@ -134,7 +134,7 @@ export default function PostJobPage() {
                 </div>
               ))}
               {/* Connector Lines */}
-              <div className="absolute top-5 left-5 right-5 h-0.5 bg-zinc-200 dark:bg-zinc-800 -z-0">
+              <div className="absolute top-5 left-5 right-5 h-0.5 bg-zinc-200 dark:bg-zinc-800 z-0">
                 <motion.div 
                   className="h-full bg-blue-600"
                   initial={{ width: "0%" }}
