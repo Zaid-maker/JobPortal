@@ -14,7 +14,7 @@ import {
   Mail,
   Zap
 } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/navigation";
 import { motion } from "framer-motion";
 
 const STATS = [

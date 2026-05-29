@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect, Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import { Filter, Search, X, Loader2 } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/navigation";
 import { PageWrapper } from "@/components/PageWrapper";
 import { useSearchParams } from "next/navigation";
 
